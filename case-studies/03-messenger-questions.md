@@ -31,27 +31,27 @@ List all the entities that you think are necessary for the messenger app
 
 **Question**: `What according to you would be the number of daily active users for the messenger app?`
 
-**Answer**: ` `
+**Answer**: `500M`
 
 **Question**: `How many conversations do you think a user would have in a day?`
 
-**Answer**: ` `
+**Answer**: `5`
 
 **Question**: `How many messages do you think would be exchanged in a conversation?`
 
-**Answer**: ` `
+**Answer**: `10`
 
 **Question**: `What are the total number of messages exchanged in a day?`
 
-**Answer**: ` `
+**Answer**: `25 B`
 
 **Question**: `What is the size of a message?`
 
-**Answer**: ` `
+**Answer**: `200 Bytes`
 
 **Question**: `What is the total amount of data exchanged in a day?`
 
-**Answer**: ` `
+**Answer**: `5 TB`
 
 ## Major operations
 
@@ -60,39 +60,39 @@ List all the entities that you think are necessary for the messenger app
 Screen - **Home screen**
 API calls - 
 ```
-- API 1(Params)
-- API 2(Params)
+- Get all conversations(user_id)
+- get_conversation(con_id)
 ```
 
 Screen - **Chat screen**
 ```
-- API 1(Params)
-- API 2(Params)
+- get_messages(conv_id, user_id)
+- post_messages(conv_id, sender_id, receiver_id, text)
 ```
 ---
 ## Design decisions
 
 **Question**: `Will your system be read-heavy or write-heavy?`
 
-**Answer**: ` `
+**Answer**: `Both`
 
 **Question**: `Out of the 3 parts of the CAP theorem, which one would you choose for your system?`
 
-**Answer**: ` `
+**Answer**: `Consistency`
 
 ---
 ## Sharding
 
 **Question**: `Do you need to shard your database?`
 
-**Answer**: ` `
+**Answer**: `Yes`
 
 **Question**: `What would be the different candidate keys for sharding?`
 
 **Answer**:
 ```
-- Candidate key 1
-- Candidate key 2
+- User Id
+- Conversation ID
 ```
 
 ### Candidate key 1
@@ -101,10 +101,12 @@ Screen - **Chat screen**
 
 **Answer**:
 ```
-- Operation 1
-    - Number of hops
-- Operation 2
-    - Number of hops
+- get conversations
+    - 1
+- get messages
+    - 1
+- send messages
+    - 2
 ```
 
 ### Candidate key 2
@@ -113,10 +115,12 @@ Screen - **Chat screen**
 
 **Answer**:
 ```
-- Operation 1
-    - Number of hops
-- Operation 2
-    - Number of hops
+- get conversations
+    - N
+- get messages
+    - 1
+- send message
+    - 1
 ```
 
 **Final choice**: ` `
@@ -125,6 +129,7 @@ Screen - **Chat screen**
 
 **Answer**: 
 ```
+Cache, to reduce read requests
 ```
 
 ---
@@ -135,6 +140,7 @@ Screen - **Chat screen**
 
 **Answer** - 
 ```
+By writing in shard B first and then writing in shard A
 ```
 
 ## Database
@@ -143,6 +149,7 @@ Screen - **Chat screen**
 
 **Answer** - 
 ```
+No SQL, HBase or casssandra due to high write throughput
 ```
 
 
